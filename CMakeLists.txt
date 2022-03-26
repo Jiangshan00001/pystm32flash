@@ -10,7 +10,7 @@ add_definitions(-D__WIN32__)
 message("set win32")
 endif()
 
-if(UNIX)# AND NOT APPLE
+if(UNIX AND NOT APPLE)# 
 set(__linux__  1)
 add_definitions(-D__linux__)
 message("set linux")
