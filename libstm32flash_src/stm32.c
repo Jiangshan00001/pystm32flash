@@ -23,11 +23,16 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
-//#include <unistd.h>
+//
 
 #include "stm32.h"
 #include "port.h"
 #include "utils.h"
+
+#ifndef __WIN32__
+#include <unistd.h>
+#endif
+
 
 #define STM32_ACK	0x79
 #define STM32_NACK	0x1F

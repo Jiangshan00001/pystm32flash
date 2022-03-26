@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <unistd.h>
+//
 #include <sys/stat.h>
 
 #include "compiler.h"
@@ -35,6 +35,11 @@
 #include "stm32.h"
 #include "port.h"
 #include "utils.h"
+
+#ifndef __WIN32__
+#include <unistd.h>
+#endif
+
 
 extern FILE *diag;
 
