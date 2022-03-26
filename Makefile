@@ -5,7 +5,7 @@ dep_install:
 	$(PYTHON) -m pip install setuptools wheel twine
 
 dist:
-	$(PYTHON) setup.py mybuild --installprefix=./pystm32flash
+	#$(PYTHON) setup.py mybuild --installprefix=./pystm32flash
 	$(PYTHON) setup.py sdist bdist_wheel
 
 .PHONY: upload

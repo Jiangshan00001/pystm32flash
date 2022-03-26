@@ -103,7 +103,7 @@ uint32_t	readwrite_len	= 0;
 
 /* functions */
 int  parse_options(char *prog_name);
-DLL_EXPORT(void) show_help(char *name);
+DLL_EXPORT(void) show_help();
 
 static const char *action2str(enum actions act)
 {
@@ -240,11 +240,12 @@ void sighandler(int s){
 }
 #endif
 
-DLL_EXPORT(int) run_it(char* prog_name) {
+DLL_EXPORT(int) run_it() {
     int ret = 1;
     stm32_err_t s_err;
     parser_err_t perr;
     diag = stdout;
+    char prog_name[]="stm32flash";
 
     if (parse_options(prog_name) != 0)
         goto close;
@@ -706,10 +707,15 @@ DLL_EXPORT(int) set_arg(char * arg_key, char *arg_val)
     int c;
     char *pLen;
 
-    int argc=2;
+    int argc=1;
     char argv[3][300];
-    memcpy(argv[0], arg_key, strlen(arg_key));
-    memcpy(argv[1], arg_val, strlen(arg_val));
+    strcpy(argv[0], arg_key));
+    if(strlen(arg_val)>0)
+    {
+        strcpy(argv[1], arg_val);
+        argc=2;
+    }
+
     argv[2][0]=0;
     argv[2][1]=0;
 
@@ -886,7 +892,7 @@ DLL_EXPORT(int) set_arg(char * arg_key, char *arg_val)
             break;
 
         case 'h':
-            show_help(argv[0]);
+            show_help();
             exit(0);
 
         case 'i':
@@ -928,20 +934,21 @@ int parse_options(char *prog_name)
 
     if (port_opts.device == NULL) {
         fprintf(stderr, "ERROR: Device not specified\n");
-        show_help(prog_name);
+        show_help();
         return 1;
     }
 
     if ((action != ACT_WRITE) && verify) {
         fprintf(stderr, "ERROR: Invalid usage, -v is only valid when writing\n");
-        show_help(prog_name);
+        show_help();
         return 1;
     }
 
     return 0;
 }
 
-DLL_EXPORT(void) show_help(char *name) {
+DLL_EXPORT(void) show_help() {
+    char *name = "stm32flash";
     fprintf(stderr,
             "Usage: %s [-bvngfhc] [-[rw] filename] [tty_device | i2c_device]\n"
             "	-a bus_address	Bus address (e.g. for I2C port)\n"

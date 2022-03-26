@@ -6,7 +6,9 @@ from cffi import FFI
 
 def _get_library_prefix():
     if sys.platform == 'win32':
-        return 'msys-'
+        return ''
+    elif sys.platform=='cygwin':
+        return ''
     else:
         return 'lib'
 
@@ -15,6 +17,8 @@ def _get_library_suffix():
     if sys.platform == "darwin":
         return 'dylib'
     elif sys.platform == 'win32':
+        return 'dll'
+    elif sys.platform == 'cygwin':
         return 'dll'
     else:
         return 'so'

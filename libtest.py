@@ -1,8 +1,7 @@
-import pystm32flash
-dir(pystm32flash)
-pystm32flash.api.show_help(b'program')
-pystm32flash.api.set_arg(b'-w', b'test.hex')
-pystm32flash.api.set_arg(b'-v', b'')
-pystm32flash.api.set_device(b'/dev/ttyS0')
-pystm32flash.api.run_it(b"stm32flash")
+import pystm32flash as stm32f
+stm32f.api.show_help()
+stm32f.api.set_arg(b'-w', b'test.hex')
+stm32f.api.set_arg(b'-v', b'')
+stm32f.api.set_device(b'/dev/ttyS0')
+stm32f.api.run_it()
 

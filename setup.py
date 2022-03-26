@@ -52,7 +52,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 setuptools.setup(
       name='pystm32flash',
-      version='0.0.1',
+      version='0.0.3',
       description='Library using stm32flash in python.',
       long_description=long_description,
       long_description_content_type = "text/markdown",      
