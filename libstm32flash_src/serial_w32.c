@@ -44,6 +44,7 @@ int usleep(unsigned long usec)
     SetWaitableTimer(timer, &interval, 0, NULL, NULL, 0);
     WaitForSingleObject(timer, INFINITE);
     CloseHandle(timer);
+    return 0;
 }
 
 

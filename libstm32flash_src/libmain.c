@@ -919,7 +919,7 @@ DLL_EXPORT(int) set_device(char * device_name)
     return 0;
 }
 
-DLL_EXPORT(int) parse_options(char *prog_name)
+int parse_options(char *prog_name)
 {
     int c;
     char *pLen;
