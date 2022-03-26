@@ -130,3 +130,5 @@ dmypy.json
 qt_test/*
 *.bak
 build_vc/*
+.idea/*
+pystm32flash/*

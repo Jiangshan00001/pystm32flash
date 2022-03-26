@@ -30,7 +30,7 @@
 
 
 #ifdef __WIN32__
-typedef size_t ssize_t;
+typedef long  int ssize_t;
 #endif
 
 typedef struct {

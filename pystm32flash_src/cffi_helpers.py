@@ -6,7 +6,7 @@ from cffi import FFI
 
 def _get_library_prefix():
     if sys.platform == 'win32':
-        return 'msys-'
+        return ''
     else:
         return 'lib'
 

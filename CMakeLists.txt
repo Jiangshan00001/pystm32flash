@@ -4,17 +4,19 @@ project(pystm32flash)
 
 
 
-if(WIN32)
+if(WIN32 OR MSYS OR MINGW)
 set(__WIN32__  1)
 add_definitions(-D__WIN32__)
 message("set win32")
-endif()
+elseif(APPLE)
 
-if(UNIX AND NOT APPLE)# 
+elseif(UNIX AND NOT APPLE)
 set(__linux__  1)
 add_definitions(-D__linux__)
 message("set linux")
+
 endif()
+
 
 
 add_subdirectory(libstm32flash_src)

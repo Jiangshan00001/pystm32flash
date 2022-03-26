@@ -94,9 +94,13 @@ char		*gpio_seq	= NULL;
 uint32_t	start_addr	= 0;
 uint32_t	readwrite_len	= 0;
 
+//extern "C"
+#define DLL_EXPORT(ret_type)   __declspec(dllexport)  ret_type __stdcall
+
+
 /* functions */
 int  parse_options(char *prog_name);
-void show_help(char *name);
+DLL_EXPORT(void) show_help(char *name);
 
 static const char *action2str(enum actions act)
 {
@@ -233,7 +237,7 @@ void sighandler(int s){
 }
 #endif
 
-int run_it(char* prog_name) {
+DLL_EXPORT(int) run_it(char* prog_name) {
     int ret = 1;
     stm32_err_t s_err;
     parser_err_t perr;
@@ -694,7 +698,7 @@ close:
 
 
 
-int set_arg(char * arg_key, char *arg_val)
+DLL_EXPORT(int) set_arg(char * arg_key, char *arg_val)
 {
     int c;
     char *pLen;
@@ -903,7 +907,7 @@ int set_arg(char * arg_key, char *arg_val)
     return 0;
 
 }
-int set_device(char * device_name)
+DLL_EXPORT(int) set_device(char * device_name)
 {
     static char device_all[200];
     memcpy(device_all, device_name, strlen(device_name));
@@ -912,7 +916,7 @@ int set_device(char * device_name)
     return 0;
 }
 
-int parse_options(char *prog_name)
+DLL_EXPORT(int) parse_options(char *prog_name)
 {
     int c;
     char *pLen;
@@ -934,7 +938,7 @@ int parse_options(char *prog_name)
     return 0;
 }
 
-void show_help(char *name) {
+DLL_EXPORT(void) show_help(char *name) {
     fprintf(stderr,
             "Usage: %s [-bvngfhc] [-[rw] filename] [tty_device | i2c_device]\n"
             "	-a bus_address	Bus address (e.g. for I2C port)\n"
