@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <unistd.h>
+//
 #include <string.h>
 #include <signal.h>
 
@@ -43,6 +43,8 @@
 #if defined(__WIN32__) || defined(__CYGWIN__)
 #include <windows.h>
 #include "getopt/getopt.h"
+#else
+#include <unistd.h>
 #endif
 
 #define VERSION "0.6"
