@@ -709,7 +709,7 @@ DLL_EXPORT(int) set_arg(char * arg_key, char *arg_val)
 
     int argc=1;
     char argv[3][300];
-    strcpy(argv[0], arg_key));
+    strcpy(argv[0], arg_key);
     if(strlen(arg_val)>0)
     {
         strcpy(argv[1], arg_val);
