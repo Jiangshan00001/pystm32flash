@@ -129,3 +129,4 @@ dmypy.json
 .pyre/
 qt_test/*
 *.bak
+build_vc/*

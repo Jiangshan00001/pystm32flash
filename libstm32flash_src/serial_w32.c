@@ -23,13 +23,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <windows.h>
 #include <ctype.h>
 
 #include "compiler.h"
 #include "serial.h"
 #include "port.h"
+
+
+
+
+int usleep(unsigned long usec)
+{
+    HANDLE timer;
+    LARGE_INTEGER interval;
+    interval.QuadPart = -(10 * usec);
+
+    timer = CreateWaitableTimer(NULL, TRUE, NULL);
+    SetWaitableTimer(timer, &interval, 0, NULL, NULL, 0);
+    WaitForSingleObject(timer, INFINITE);
+    CloseHandle(timer);
+}
+
 
 struct serial {
 	HANDLE fd;

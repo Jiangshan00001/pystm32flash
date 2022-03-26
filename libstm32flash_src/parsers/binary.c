@@ -21,15 +21,23 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
+
 
 #include "binary.h"
+
+
+#ifdef __WIN32__
+typedef size_t ssize_t;
+#endif
 
 typedef struct {
 	int		fd;
 	char		write;
 	struct stat	stat;
+    FILE *fp;
 } binary_t;
 
 void* binary_init() {
@@ -37,49 +45,38 @@ void* binary_init() {
 }
 
 parser_err_t binary_open(void *storage, const char *filename, const char write) {
+
+
 	binary_t *st = storage;
-	if (write) {
+
+
+
+    if (write) {
 		if (filename[0] == '-' && filename[1] == '\0')
-			st->fd = 1;
+            st->fp = stdout;
 		else
-			st->fd = open(
-				filename,
-#ifndef __WIN32__
-				O_WRONLY | O_CREAT | O_TRUNC,
-#else
-				O_WRONLY | O_CREAT | O_TRUNC | O_BINARY,
-#endif
-#ifndef __WIN32__
-				S_IRUSR  | S_IWUSR | S_IRGRP | S_IROTH
-#else
-				0
-#endif
-			);
+            st->fp = fopen(filename, "wb");
+
 		st->stat.st_size = 0;
 	} else {
 		if (filename[0] == '-' && filename[1] == '\0') {
-			st->fd = 0;
+            st->fp = stdin;
 		} else {
-			if (stat(filename, &st->stat) != 0)
-				return PARSER_ERR_INVALID_FILE;
-			st->fd = open(filename,
-#ifndef __WIN32__
-				O_RDONLY
-#else
-				O_RDONLY | O_BINARY
-#endif
-			);
+            st->fp = fopen(filename, "rb");
+            if (st->fp==NULL)return PARSER_ERR_INVALID_FILE;
+
 		}
 	}
 
 	st->write = write;
-	return st->fd == -1 ? PARSER_ERR_SYSTEM : PARSER_ERR_OK;
+    return st->fp == NULL ? PARSER_ERR_SYSTEM : PARSER_ERR_OK;
 }
 
 parser_err_t binary_close(void *storage) {
 	binary_t *st = storage;
 
-	if (st->fd) close(st->fd);
+    if (st->fp) fclose(st->fp);
+    st->fp = NULL;
 	free(st);
 	return PARSER_ERR_OK;
 }
@@ -102,7 +99,7 @@ parser_err_t binary_read(void *storage, void *data, unsigned int *len) {
 
 	ssize_t r;
 	while(left > 0) {
-		r = read(st->fd, d, left);
+        r = fread(d, left,1, st->fp);
 		if (r == 0)
 			break ;
 		else if ( r < 0)
@@ -124,7 +121,7 @@ parser_err_t binary_write(void *storage, void *data, unsigned int len) {
 
 	ssize_t r;
 	while(len > 0) {
-		r = write(st->fd, d, len);
+        r = fwrite(d, len,1, st->fp);
 		if (r < 1) return PARSER_ERR_SYSTEM;
 		st->stat.st_size += r;
 

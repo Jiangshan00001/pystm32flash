@@ -20,7 +20,7 @@
 
 #include <sys/types.h>
 #include <fcntl.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -46,19 +46,19 @@ parser_err_t hex_open(void *storage, const char *filename, const char write) {
 		return PARSER_ERR_RDONLY;
 	} else {
 		char mark;
-		int fd;
+        FILE* fp;
 		uint8_t checksum;
 		unsigned int c, i;
 		uint32_t base = 0;
 		unsigned int last_address = 0x0;
 
-		fd = open(filename, O_RDONLY);
-		if (fd < 0)
+        fp = fopen(filename, "r");
+        if (fp < 0)
 			return PARSER_ERR_SYSTEM;
 
 		/* read in the file */
 
-		while(read(fd, &mark, 1) != 0) {
+        while(fread(&mark, 1, 1, fp) != 0) {
 			if (mark == '\n' || mark == '\r') continue;
 			if (mark != ':')
 				return PARSER_ERR_INVALID_FILE;
@@ -69,9 +69,9 @@ parser_err_t hex_open(void *storage, const char *filename, const char write) {
 
 			/* get the reclen, address, and type */
 			buffer[8] = 0;
-			if (read(fd, &buffer, 8) != 8) return PARSER_ERR_INVALID_FILE;
+            if (fread(&buffer, 8, 1, fp) != 8) return PARSER_ERR_INVALID_FILE;
 			if (sscanf(buffer, "%2x%4x%2x", &reclen, &address, &type) != 3) {
-				close(fd);
+				fclose(fp);
 				return PARSER_ERR_INVALID_FILE;
 			}
 
@@ -117,8 +117,8 @@ parser_err_t hex_open(void *storage, const char *filename, const char write) {
 
 			buffer[2] = 0;
 			for(i = 0; i < reclen; ++i) {
-				if (read(fd, &buffer, 2) != 2 || sscanf(buffer, "%2x", &c) != 1) {
-					close(fd);
+                if (fread(&buffer, 2, 1, fp) != 2 || sscanf(buffer, "%2x", &c) != 1) {
+					fclose(fp);
 					return PARSER_ERR_INVALID_FILE;
 				}
 
@@ -143,18 +143,18 @@ parser_err_t hex_open(void *storage, const char *filename, const char write) {
 
 			/* read, scan, and verify the checksum */
 			if (
-				read(fd, &buffer, 2 ) != 2 ||
+                fread(&buffer, 2,1, fp ) != 2 ||
 				sscanf(buffer, "%2x", &c) != 1 ||
 				(uint8_t)(checksum + c) != 0x00
 			) {
-				close(fd);
+                fclose(fp);
 				return PARSER_ERR_INVALID_FILE;
 			}
 
 			switch(type) {
 				/* EOF */
 				case 1:
-					close(fd);
+					fclose(fp);
 					return PARSER_ERR_OK;
 
 				/* address record */
@@ -176,7 +176,7 @@ parser_err_t hex_open(void *storage, const char *filename, const char write) {
 
 					/* we cant cope with files out of order */
 					if (base < st->base) {
-						close(fd);
+                        fclose(fp);
 						return PARSER_ERR_INVALID_FILE;
 					}
 
@@ -191,7 +191,7 @@ parser_err_t hex_open(void *storage, const char *filename, const char write) {
 			}
 		}
 
-		close(fd);
+        fclose(fp);
 		return PARSER_ERR_OK;
 	}
 }

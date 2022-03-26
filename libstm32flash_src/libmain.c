@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include <string.h>
 #include <signal.h>
 
@@ -42,6 +42,7 @@
 
 #if defined(__WIN32__) || defined(__CYGWIN__)
 #include <windows.h>
+#include "getopt/getopt.h"
 #endif
 
 #define VERSION "0.6"
@@ -581,7 +582,7 @@ again:
             }
 
             if (verify) {
-                uint8_t compare[len];
+                uint8_t *compare= (uint8_t*)malloc(len);
                 unsigned int offset, rlen;
 
                 offset = 0;
@@ -591,6 +592,7 @@ again:
                     s_err = stm32_read_memory(stm, addr + offset, compare + offset, rlen);
                     if (s_err != STM32_ERR_OK) {
                         fprintf(stderr, "Failed to read memory at address 0x%08x\n", addr + offset);
+                        free(compare);
                         goto close;
                     }
                     offset += rlen;
@@ -604,13 +606,16 @@ again:
                                     buffer [r],
                                     compare[r]
                                     );
+                            free(compare);
                             goto close;
                         }
                         ++failed;
+                        free(compare);
                         goto again;
                     }
 
                 failed = 0;
+                free(compare);
             }
 
             addr	+= len;

@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.4.1)
-
 
 
 #project(libstm32flash)
@@ -24,6 +22,12 @@ add_subdirectory(parsers)
 
 target_link_libraries(stm32flash parsers)
 target_link_libraries(stm32flashlib parsers)
+
+if(WIN32)
+add_subdirectory(getopt)
+target_link_libraries(stm32flash getopt)
+target_link_libraries(stm32flashlib getopt)
+endif()
 
 INSTALL(TARGETS stm32flashlib 
         LIBRARY DESTINATION lib
