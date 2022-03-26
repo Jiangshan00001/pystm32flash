@@ -64,35 +64,5 @@ stm32f.api.run_it()
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-```
-import pystm32flash as stm32f
-#show help:
-stm32f.api.show_help()
-stm32f.api.set_arg(b'-w', b'test.hex')
-stm32f.api.set_arg(b'-v', b'')
-stm32f.api.set_device(b'/dev/ttyS0')
-stm32f.api.run_it()
-
-```
-
-
-
-
-
-
-
-
-
-
 c code is mostly from:
 https://github.com/ARMinARM/stm32flash
