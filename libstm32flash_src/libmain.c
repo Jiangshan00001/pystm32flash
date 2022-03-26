@@ -95,8 +95,11 @@ uint32_t	start_addr	= 0;
 uint32_t	readwrite_len	= 0;
 
 //extern "C"
+#ifdef __WIN32__
 #define DLL_EXPORT(ret_type)   __declspec(dllexport)  ret_type __stdcall
-
+#else
+#define DLL_EXPORT(ret_type) ret_type
+#endif
 
 /* functions */
 int  parse_options(char *prog_name);
