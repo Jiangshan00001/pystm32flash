@@ -1,4 +1,5 @@
 import pystm32flash as stm32f
+stm32f.api.reset_params()
 stm32f.api.show_help()
 stm32f.api.set_arg(b'-w', b'test.hex')
 stm32f.api.set_arg(b'-v', b'')

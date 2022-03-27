@@ -101,6 +101,14 @@ uint32_t	readwrite_len	= 0;
 #define DLL_EXPORT(ret_type) ret_type
 #endif
 
+
+
+
+
+
+
+
+
 /* functions */
 int  parse_options(char *prog_name);
 DLL_EXPORT(void) show_help();
@@ -239,6 +247,38 @@ void sighandler(int s){
     exit(1);
 }
 #endif
+
+
+
+DLL_EXPORT(int) reset_params()
+{
+    port_opts.device= NULL;
+    port_opts.baudRate		= SERIAL_BAUD_57600;
+    port_opts.serial_mode		= "8e1";
+    port_opts.bus_addr		= 0;
+    port_opts.rx_frame_max		= STM32_MAX_RX_FRAME;
+    port_opts.tx_frame_max		= STM32_MAX_TX_FRAME;
+
+    action		= ACT_NONE;
+    npages		= 0;
+    spage           = 0;
+    no_erase        = 0;
+    verify		= 0;
+    retry		= 10;
+    exec_flag	= 0;
+    execute		= 0;
+    init_flag	= 1;
+    use_stdinout	= 0;
+    force_binary	= 0;
+    diag=NULL;
+    reset_flag	= 0;
+    filename=NULL;
+    gpio_seq	= NULL;
+    start_addr	= 0;
+    readwrite_len	= 0;
+    return 0;
+}
+
 
 DLL_EXPORT(int) run_it() {
     int ret = 1;
@@ -934,13 +974,11 @@ int parse_options(char *prog_name)
 
     if (port_opts.device == NULL) {
         fprintf(stderr, "ERROR: Device not specified\n");
-        show_help();
         return 1;
     }
 
     if ((action != ACT_WRITE) && verify) {
         fprintf(stderr, "ERROR: Invalid usage, -v is only valid when writing\n");
-        show_help();
         return 1;
     }
 

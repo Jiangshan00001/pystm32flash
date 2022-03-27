@@ -52,7 +52,7 @@ with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 setuptools.setup(
       name='pystm32flash',
-      version='0.0.3',
+      version='0.0.4',
       description='Library using stm32flash in python.',
       long_description=long_description,
       long_description_content_type = "text/markdown",      
@@ -67,6 +67,11 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-    ]
+    ],
+    entry_points={
+        "console_scripts":[
+            'pystm32flash = pystm32flash.tools:flash_cmd'
+        ]
+    }
       )
       

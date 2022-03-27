@@ -2,6 +2,7 @@
 python bindings of stm32flash serial/i2c flash lib
 
 
+
 # it should work on windows, linux and macos.
 
 # how to install it:
@@ -62,6 +63,14 @@ stm32f.api.set_arg(b'-r', b'test.bin')
 stm32f.api.set_device(b'/dev/ttyS0')
 stm32f.api.run_it()
 ```
+
+
+# any problem?
+
+make an issue:
+https://github.com/Jiangshan00001/pystm32flash/issues
+
+
 
 
 c code is mostly from:
